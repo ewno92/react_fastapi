@@ -1,15 +1,12 @@
 import { useCallback, useRef } from "react";
 import { Loader } from "lucide-react";
 import Post from "./Post";
-import useInfiniteScrollPosts from "./hooks/useInfiniteScrollPosts";
 import { INFINITE_SCROLL_PAGINATION_RESULTS } from "../config";
 import { usePostsContext } from "../context/PostsContext";
 
 const PostFeed = () => {
-  const { offset, setOffset } = usePostsContext();
-
-  // Custom hook to handle infinite scroll posts loading
-  const { posts, hasMore, loading, error } = useInfiniteScrollPosts();
+  const { offset, setOffset, loading, error, hasMore, posts } =
+    usePostsContext();
 
   // Ref for observing the last post element to trigger loading more posts
   const observer = useRef<IntersectionObserver | null>(null);
