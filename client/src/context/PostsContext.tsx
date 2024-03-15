@@ -104,7 +104,13 @@ export const PostsProvider: FC<{ children: ReactNode }> = ({ children }) => {
           `${API_BASE_URL}/posts?limit=${limit}&offset=${offset}`
         );
         setPosts((prevPosts) => {
-          const newPosts = res.data.posts;
+          //filter duplicate posts
+          const newPosts = res.data.posts.filter(
+            (newPost: { post_url: string }) =>
+              !prevPosts.some(
+                (prevPost) => prevPost.post_url === newPost.post_url
+              )
+          );
           return [...prevPosts, ...newPosts];
         });
         setHasMore(res.data.hasMore);
