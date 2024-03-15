@@ -18,7 +18,7 @@ interface PartialPostResponse {
 }
 
 const ExpandedPost: FC = () => {
-  const { hasAssessment, getPostById, updatePostAttributes } =
+  const { hasAssessment, getPostById, updatePostAttributes, setPosts } =
     usePostsContext();
   const { id } = useParams();
   const [postData, setPostData] = useState<Post | null>(getPostById(id!));
@@ -31,12 +31,14 @@ const ExpandedPost: FC = () => {
           const res = await axios.get<ExpandedPostResponse>(
             `${API_BASE_URL}/posts/${id}`
           );
-          setPostData(res.data.post);
+          setPosts((prevPosts) => {
+            const newPost = res.data.post;
+            return [...prevPosts, newPost];
+          });
         } else if (!hasAssessment(id!)) {
           const res = await axios.get<PartialPostResponse>(
             `${API_BASE_URL}/posts/${id}/partial`
           );
-
           updatePostAttributes(id!, res.data.post);
         }
       } catch (error: any) {
